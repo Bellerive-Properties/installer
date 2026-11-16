@@ -88,18 +88,18 @@ dans `/Applications` ; s'ils manquent, lui dire de les installer.
 | « Press RETURN/ENTER to continue » | Appuyer sur Entrée. |
 | `Sorry, try again` | Mauvais mot de passe du Mac : retaper. |
 | « is not in the sudoers file » / n'est pas administrateur | Son compte Mac n'est pas administrateur : il faut un compte admin (demander à Matthieu ou au support informatique). |
-| Fenêtre « outils de développement en ligne de commande » / Xcode | Cliquer **Installer**, attendre la fin (5 à 20 min), puis recoller la ligne. |
-| `brew: command not found` après l'étape 1 | Fermer Terminal (Cmd+Q), le rouvrir, recoller la ligne. |
-| `curl: (6) Could not resolve host` / pas d'internet | Vérifier le wifi, puis recoller la ligne. |
+| Fenêtre « outils de développement en ligne de commande » / Xcode | Cliquer **Installer**, attendre la fin (5 à 20 min), puis relancer l'étape. |
+| `brew: command not found` après l'étape 1 | Fermer Terminal (Cmd+Q), le rouvrir, relancer l'étape. |
+| `curl: (6) Could not resolve host` / pas d'internet | Vérifier le wifi, puis relancer l'étape. |
 | Étape 2 : un code `XXXX-XXXX` s'affiche | Le noter, Entrée, se connecter sur la page GitHub, coller le code, cliquer **Authorize**, revenir dans Terminal. |
 | La page GitHub ne s'ouvre pas | Ouvrir soi-même https://github.com/login/device et coller le code. |
-| « n'a pas encore accès aux outils Bellerive » | Invitation pas acceptée ou mauvais compte GitHub : accepter l'e-mail d'invitation (ou github.com/Bellerive-Properties/bellerive-claude/invitations), puis recoller la ligne. Si connecté au mauvais compte : `gh auth logout` puis recoller la ligne. |
+| « n'a pas encore accès aux outils Bellerive » | Invitation pas acceptée ou mauvais compte GitHub : accepter l'e-mail d'invitation (ou github.com/Bellerive-Properties/bellerive-claude/invitations), puis relancer l'étape. Si connecté au mauvais compte : `gh auth logout` puis relancer l'étape. |
 | `HTTP 404` / `Not Found` sur installer.sh | Même cause que ci-dessus (accès). |
-| `EACCES` ou `permission denied` avec npm | Coller `sudo chown -R $(whoami) "$(npm config get prefix)"`, mot de passe du Mac, puis recoller la ligne. |
-| `externally-managed-environment` (pip) | Coller `python3 -m pip install --user --break-system-packages Pillow`, puis recoller la ligne. |
-| `claude: command not found` | Fermer et rouvrir Terminal, recoller la ligne. |
+| `EACCES` ou `permission denied` avec npm | Coller `sudo chown -R $(whoami) "$(npm config get prefix)"`, mot de passe du Mac, puis relancer l'étape. |
+| `externally-managed-environment` (pip) | Coller `python3 -m pip install --user --break-system-packages Pillow`, puis relancer l'étape. |
+| `claude: command not found` | Fermer et rouvrir Terminal, relancer l'étape. |
 | La commande `/bellerive:configuration` n'existe pas dans Claude | Quitter complètement l'app Claude (Cmd+Q), la rouvrir, nouvelle session **locale**. Sinon taper `/reload-plugins`. |
 | Session « Cloud » ou Claude dit qu'il n'est pas sur son ordinateur | Nouvelle session dans l'onglet Code avec l'environnement « Local ». |
 | Diagnostic : « utilisateur API partagé » | Mauvaise clé : redemander à Matthieu celle à son nom (Claude_ + initiales). |
 | Diagnostic : « connexion EspoCRM HTTP 401 » | Clé mal copiée ou désactivée : la recopier, sinon prévenir Matthieu. |
-| Autre erreur | Lire la sortie de la commande (ou, pour Homebrew, lui demander de copier les dernières lignes de Terminal), expliquer simplement et proposer **une** action. On peut toujours recoller la ligne : le script ne refait que ce qui manque. Si ça bloque encore, lui proposer d'envoyer une capture d'écran à Matthieu. |
+| Autre erreur | Lire la sortie de la commande (ou, pour Homebrew, lui demander de copier les dernières lignes de Terminal), expliquer simplement et proposer **une** action. On peut toujours relancer l'étape : le script ne refait que ce qui manque. Si ça bloque encore, lui proposer d'envoyer une capture d'écran à Matthieu. |
