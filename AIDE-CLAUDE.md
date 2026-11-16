@@ -1,35 +1,47 @@
 # Guide pour Claude : aider un conseiller Bellerive à installer ses outils
 
 Tu aides un conseiller de Bellerive Properties, **pas du tout technique**, à
-installer les outils Claude de l'agence sur son Mac. **C'est toi qui exécutes
-les commandes** ; il ne fait que les quelques gestes impossibles pour toi.
+installer les outils Claude de l'agence sur son Mac ou son PC Windows. **C'est
+toi qui exécutes les commandes** ; il ne fait que les quelques gestes
+impossibles pour toi. Sur Mac : étapes 0 à 5. Sur Windows : étape 0, puis la
+section « Sur un PC Windows ».
 
 ## Ta façon de parler
 
 - En français, phrases courtes, vouvoiement si la personne vouvoie, tutoiement sinon.
 - **Une seule action à la fois**, puis attendre sa réponse.
 - Dire où cliquer exactement. Jamais de jargon sans l'expliquer.
-- Rassurer : rien ne peut casser le Mac, et on peut tout relancer.
+- Rassurer : rien ne peut casser l'ordinateur, et on peut tout relancer.
 - Ne jamais demander de mot de passe ni de clé dans la conversation.
 - Ne jamais lui faire connecter GitHub à Claude (claude.ai/connect-github,
   application GitHub de Claude) : ce n'est pas nécessaire.
 
 ## Déroulé
 
-**0. Peux-tu exécuter des commandes sur son Mac ?** Essaie `uname -s` et
-`echo $HOME`. Il faut `Darwin` et un dossier qui commence par `/Users/`.
+**0. Peux-tu exécuter des commandes sur son ordinateur ?** Essaie `uname -s`
+et `echo $HOME`.
+- `Darwin` et un dossier qui commence par `/Users/` : c'est son **Mac**,
+  continue à l'étape 1 en lançant toi-même chaque commande.
+- `MINGW64_NT…` ou `MSYS_NT…` et un dossier du type `/c/Users/…` : c'est son
+  **PC Windows** (Claude passe par Git Bash), va à la section « Sur un PC
+  Windows ».
 - **Non** (conversation sur claude.ai, application mobile, session « Cloud »,
   pas d'outil pour lancer des commandes, ou résultat `Linux`) : n'installe
   rien et ne lui fais rien connecter. Dis-lui simplement :
-  1. ouvrir l'**application Claude sur son Mac** (si absente : la télécharger
-     sur claude.ai/download, l'installer, se connecter avec son compte) ;
+  1. ouvrir l'**application Claude sur son ordinateur** (si absente : la
+     télécharger sur claude.ai/download, l'installer, se connecter avec son
+     compte) ;
   2. cliquer sur l'onglet **Code** en haut ;
-  3. nouvelle session : en bas, choisir **son Mac / « Local »** (pas
+  3. nouvelle session : en bas, choisir **son ordinateur / « Local »** (pas
      « Cloud ») et le dossier **Documents** ;
   4. recoller exactement le même message d'installation.
-  S'il est sur **Windows** : la version Windows est en préparation, Matthieu
-  le préviendra ; arrêter là.
-- **Oui** : continue, en lançant toi-même chaque commande.
+  S'il est sur **Windows** et que l'onglet Code ne marche pas chez lui, plan B
+  sans toi : touche Windows, taper « PowerShell », Entrée, coller cette ligne
+  (clic droit dans la fenêtre) puis Entrée, et suivre ce qui s'affiche :
+
+  ```powershell
+  irm https://raw.githubusercontent.com/Bellerive-Properties/installer/main/install.ps1 | iex
+  ```
 
 **1. Invitation GitHub.** Demande-lui s'il a un compte GitHub et a accepté
 l'invitation de Matthieu reçue par e-mail (« invited you to
@@ -80,6 +92,58 @@ dans `/Applications` ; s'ils manquent, lui dire de les installer.
 3. c'est fini quand le diagnostic affiche **« Poste prêt. »** ; Claude lui
    présente alors tout ce qu'il peut faire.
 
+## Sur un PC Windows
+
+Tu tournes dans Git Bash : lance les commandes avec ton outil Bash comme sur
+Mac ; `winget` et `powershell.exe` sont accessibles. Pas de Homebrew, pas de
+mot de passe à taper : Windows affiche seulement des fenêtres « Autoriser
+cette application à apporter des modifications ? » auxquelles il répond **Oui**.
+
+**W1. Invitation GitHub.** Comme l'étape 1.
+
+**W2. GitHub CLI.** Si `command -v gh` ne trouve rien :
+
+```bash
+winget install -e --id GitHub.cli --source winget --silent --accept-source-agreements --accept-package-agreements
+export PATH="$PATH:/c/Program Files/GitHub CLI"
+```
+
+Prévenir avant : une fenêtre Windows peut demander une autorisation, répondre
+**Oui**. Si `winget` manque : lui faire installer « App Installer » depuis le
+Microsoft Store, puis relancer.
+
+**W3. Connexion GitHub.** Exactement comme l'étape 3 (code à usage unique,
+https://github.com/login/device, **Authorize**), puis
+`gh repo view Bellerive-Properties/bellerive-claude`.
+
+**W4. Installation des outils.** Lance toi-même (le fichier garde son
+encodage, ne pas passer par PowerShell pour l'écrire) :
+
+```bash
+F="$TEMP/bellerive-installer.ps1"
+gh api -H "Accept: application/vnd.github.raw" repos/Bellerive-Properties/bellerive-claude/contents/installer.ps1 > "$F" && powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$(cygpath -w "$F")"
+```
+
+Il installe Git, Node, Python, jq, poppler, la police Raleway, Claude Code
+et le plugin (plusieurs minutes, quelques fenêtres « Oui »). Relançable sans
+risque. Ensuite, diagnostic :
+
+```bash
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$(cygpath -w ~/.claude/plugins/marketplaces/bellerive/plugins/bellerive/skills/configuration/scripts/verifier_poste.ps1)"
+```
+
+(si ce chemin n'existe pas : `find ~/.claude/plugins -name verifier_poste.ps1`).
+À ce stade les lignes « Réglages » manquent, c'est normal. Il faut **Microsoft
+Word** (Microsoft 365) pour les brochures en PDF ; Chrome ou Edge suffit pour
+les programmes de visites. Outlook classique permet de lire les horaires des
+visites ; sinon, ce n'est pas bloquant.
+
+**W5. Configuration.** Comme l'étape 5, avec ces différences : pour fermer
+complètement l'app, clic droit sur l'icône Claude près de l'horloge >
+Quitter (ou fermer la fenêtre) ; la clé se copie avec **Ctrl+C**. La
+configuration peut aussi lui proposer de coller l'adresse iCal secrète de son
+agenda (nouvel Outlook ou Google Agenda), dans le fichier, jamais dans le chat.
+
 ## Erreurs fréquentes et solutions
 
 | Ce qu'il voit | Quoi faire |
@@ -100,6 +164,12 @@ dans `/Applications` ; s'ils manquent, lui dire de les installer.
 | `claude: command not found` | Fermer et rouvrir Terminal, relancer l'étape. |
 | La commande `/bellerive:configuration` n'existe pas dans Claude | Quitter complètement l'app Claude (Cmd+Q), la rouvrir, nouvelle session **locale**. Sinon taper `/reload-plugins`. |
 | Session « Cloud » ou Claude dit qu'il n'est pas sur son ordinateur | Nouvelle session dans l'onglet Code avec l'environnement « Local ». |
+| Windows : « winget n'est pas reconnu » | Installer « App Installer » depuis le Microsoft Store, puis relancer l'étape. |
+| Windows : fenêtre « Autoriser cette application à apporter des modifications ? » | Répondre **Oui** (c'est l'installation d'un outil). |
+| Windows : `gh: command not found` juste après l'installation | `export PATH="$PATH:/c/Program Files/GitHub CLI"`, ou fermer et rouvrir l'app Claude, puis relancer l'étape. |
+| Windows : le Microsoft Store s'ouvre quand on lance `python3` | Python pas encore en place : relancer W4 (l'installateur crée `python3`), puis ouvrir une nouvelle session. |
+| Windows : « l'exécution de scripts est désactivée » | Toujours lancer avec `powershell.exe -ExecutionPolicy Bypass -File …` comme en W4. |
+| Windows : accents illisibles dans les documents | Fermer et rouvrir l'app Claude (le réglage `PYTHONUTF8` est pris en compte à l'ouverture). |
 | Diagnostic : « utilisateur API partagé » | Mauvaise clé : redemander à Matthieu celle à son nom (Claude_ + initiales). |
 | Diagnostic : « connexion EspoCRM HTTP 401 » | Clé mal copiée ou désactivée : la recopier, sinon prévenir Matthieu. |
 | Autre erreur | Lire la sortie de la commande (ou, pour Homebrew, lui demander de copier les dernières lignes de Terminal), expliquer simplement et proposer **une** action. On peut toujours relancer l'étape : le script ne refait que ce qui manque. Si ça bloque encore, lui proposer d'envoyer une capture d'écran à Matthieu. |
