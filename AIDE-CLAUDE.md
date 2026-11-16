@@ -172,4 +172,34 @@ agenda (nouvel Outlook ou Google Agenda), dans le fichier, jamais dans le chat.
 | Windows : accents illisibles dans les documents | Fermer et rouvrir l'app Claude (le réglage `PYTHONUTF8` est pris en compte à l'ouverture). |
 | Diagnostic : « utilisateur API partagé » | Mauvaise clé : redemander à Matthieu celle à son nom (Claude_ + initiales). |
 | Diagnostic : « connexion EspoCRM HTTP 401 » | Clé mal copiée ou désactivée : la recopier, sinon prévenir Matthieu. |
-| Autre erreur | Lire la sortie de la commande (ou, pour Homebrew, lui demander de copier les dernières lignes de Terminal), expliquer simplement et proposer **une** action. On peut toujours relancer l'étape : le script ne refait que ce qui manque. Si ça bloque encore, lui proposer d'envoyer une capture d'écran à Matthieu. |
+| Autre erreur | Lire la sortie de la commande (ou, pour Homebrew, lui demander de copier les dernières lignes de Terminal), expliquer simplement et proposer **une** action. On peut toujours relancer l'étape : le script ne refait que ce qui manque. Si c'est un défaut des scripts, créer une issue (section en fin de guide). Si ça bloque encore, lui proposer d'envoyer une capture d'écran à Matthieu. |
+
+## Bug dans les scripts : créer une issue pour Matthieu
+
+Si tu trouves un **défaut des scripts ou des outils** (pas une erreur de
+manipulation de la personne : par exemple une boucle sans fin, un réglage mal
+lu, une commande qui échoue sur tous les ordinateurs), ne te contente pas de le
+contourner : signale-le à Matthieu par une **issue GitHub**, pour que les
+autres conseillers ne le rencontrent pas.
+
+1. Rédige l'issue en français, courte et précise :
+   - titre : « [Installation Mac] … » ou « [Installation Windows] … » ;
+   - corps : ce qui se passe, le fichier et la ligne en cause, la cause
+     probable, la correction proposée (si tu la connais), l'ordinateur
+     (Mac / Windows, version), et un extrait de la sortie de la commande.
+   - **Jamais** de clé, de secret, de mot de passe, ni de contenu du fichier
+     `config.env` ; retirer tout ce qui y ressemble.
+2. Montre-la à la personne et demande son accord avant d'envoyer.
+3. Envoie-la (accès en lecture suffisant pour ouvrir une issue) :
+
+   ```bash
+   gh issue create -R Bellerive-Properties/bellerive-claude --title "…" --body-file -
+   ```
+
+   Si `gh` n'est pas encore installé ou connecté, donne-lui à la place un
+   message prêt à transférer à Matthieu.
+4. Donne-lui le lien de l'issue, puis continue l'installation (avec ton
+   contournement si tu en as un).
+
+Une fois les outils installés, la personne peut aussi dire simplement
+« envoie à Matthieu que… » : la compétence `envoyer-a-matthieu` s'en charge.
